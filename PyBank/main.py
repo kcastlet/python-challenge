@@ -13,7 +13,10 @@ with open(csvpath, newline="") as csvfile:
     change = 0
     TotalChange =0
     AverageChange = 0
-    #reading csv file
+    increase_profit = 0
+    decrease_profit = 0
+    
+    #skip header
     next(csvreader)
 
     for row in csvreader:
@@ -22,27 +25,35 @@ with open(csvpath, newline="") as csvfile:
         #keep total profit/loss
         total += float(row[1])
         
-
         if row_count>1:
-            change = float(row[1])-  LastRow
+            change = float(row[1]) -  LastRow
 
+        if decrease_profit > float(row[1]):
+            decrease_profit = float(row[1])
+            min_date = row[0]
+
+        if increase_profit < float(row[1]):
+            increase_profit = float(row[1])
+            max_date = row[0]
         
         #keep running total change
         TotalChange = TotalChange + float(change)
         #holds value to do change
         LastRow=float(row[1])
 
-increase_profit = max(change)
-decrease_profit = min(change)
 
-        if row[1] = float(increase_profit)
-            max_date = row[0]
-        if row[1] = float(decrease_profit)
-            min_date = row[0]
 
 AverageChange = float(TotalChange)/float(row_count-1)
-print("Average Change: " + str(AverageChange))
-print("TotalMonths: " + str(row_count))    
-print("Total: " + str(total)
-print("Greatest Increase in Profits: " + str(max_date) + str(increase_profit))
-print("Greatest Decrease in Profits: " + str(min_date) + str(decrease_profit))
+
+print(f"Average Change: ${AverageChange:,.2f}")
+print(f"TotalMonths: {row_count}")    
+print(f"Total: {total}")
+print(f"Greatest Increase in Profits: {max_date} ${increase_profit:,.2f}")
+print(f"Greatest Decrease in Profits: {min_date} ${decrease_profit:,.2f}")
+
+with open("Output.txt", "w") as text_file:
+    text_file.write(f"Average Change: ${AverageChange:,.2f}\n")
+    text_file.write(f"TotalMonths: {row_count}\n")
+    text_file.write(f"Total: {total}\n")
+    text_file.write(f"Greatest Increase in Profits: {max_date} ${increase_profit:,.2f}\n")
+    text_file.write(f"Greatest Decrease in Profits: {min_date} ${decrease_profit:,.2f}\n")
